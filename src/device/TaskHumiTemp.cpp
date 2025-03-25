@@ -23,10 +23,7 @@ void TaskTemperature_Humidity(void *pvParameters)
     Serial.print(" %");
     Serial.println();
 
-    String data = "{";
-    data += "\"temperature\":" + String(dht20.getTemperature()) + ",";
-    data += "\"humidity\":" + String(dht20.getHumidity());
-    data += "}";
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
 }
 
