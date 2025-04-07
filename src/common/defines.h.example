@@ -1,13 +1,13 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
-#define SSID ""
-#define PASSWORD ""
-#define MQTT_SERVER ""
+#define SSID "-----------------"
+#define PASSWORD "--------------------"
+#define MQTT_SERVER "--------------------"
 #define MQTT_PORT 1883
-#define ACCESS_TOKEN ""
-#define ACCESS_USERNAME ""
-#define CLIENT_ID ""
+#define ACCESS_TOKEN "------------"
+#define ACCESS_USERNAME "------------------"
+#define CLIENT_ID "-------------------------"
 
 // delay time
 #define delay_led 1000
@@ -27,5 +27,32 @@
 #ifndef PIN_LED
 #define PIN_LED 48
 #endif
+
+// Pin relay
+#ifndef PIN_RELAY
+#define PIN_RELAY 1
+#endif
+
+#ifndef PIN_RELAY
+#define PIN_RELAY 2
+#endif
+
+#ifndef PIN_RELAY
+#define PIN_RELAY 3
+#endif
+
+#ifndef PIN_RELAY
+#define PIN_RELAY 4
+#endif
+
+#ifndef PIN_RELAY
+#define PIN_RELAY 5
+#endif
+
+#ifndef PIN_RELAY
+#define PIN_RELAY 6
+#endif
+
+#define httpPort 80
 
 #endif // DEFINES_H

@@ -2,6 +2,31 @@
 
 double temperature = 0, humidity = 0;
 
+void saveTemp_HumiToFile()
+{
+  File file = LittleFS.open("/temp_humi.dat", "a");
+  if (!file)
+  {
+    Serial.println("Failed to open file for appending");
+    return;
+  }
+
+  DynamicJsonDocument doc(2048);
+  doc["mode"] = "Temp_Humi";
+  doc["data"] = String(temperature, 2) + "-" + String(humidity, 2);
+
+  if (file.size() > 0)
+  {
+    file.print(",\n");
+  }
+
+  if (serializeJson(doc, file) == 0)
+  {
+    Serial.println("Failed to write to file");
+  }
+
+  file.close();
+}
 void TaskTemperature_Humidity(void *pvParameters)
 {
   DHT20 dht20;
@@ -15,15 +40,38 @@ void TaskTemperature_Humidity(void *pvParameters)
     temperature = dht20.getTemperature();
     humidity = dht20.getHumidity();
 
-    Serial.print("Temp: ");
-    Serial.print(temperature);
-    Serial.print(" *C ");
-    Serial.print(" Humi: ");
-    Serial.print(humidity);
-    Serial.print(" %");
-    Serial.println();
+    // Serial.print("Temp: ");
+    // Serial.print(temperature);
+    // Serial.print(" *C ");
+    // Serial.print(" Humi: ");
+    // Serial.print(humidity);
+    // Serial.print(" %");
+    // Serial.println();
 
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    String data = "{";
+    data += "\"temperature\":" + String(dht20.getTemperature()) + ",";
+    data += "\"humidity\":" + String(dht20.getHumidity());
+    data += "}";
+
+    DynamicJsonDocument doc(256);
+    doc["temperature"] = temperature;
+    doc["humidity"] = humidity;
+
+    String jsonData;
+    serializeJson(doc, jsonData);
+
+    // Gửi dữ liệu đến tất cả WebSocket client
+    ws.textAll(jsonData);
+
+    client.publish("v1/devices/me/telemetry", data.c_str());
+    if (WiFi.status() != WL_CONNECTED)
+    {
+      if (temperature != 0 && humidity != 0)
+      {
+        saveTemp_HumiToFile();
+      }
+    }
+    vTaskDelay(5000);
   }
 }
 

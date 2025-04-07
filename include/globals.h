@@ -29,5 +29,7 @@
 
 // devices
 #include "../src/device/Device_init.h"
+#include "../src/tasks/Task_init.h"
+#include "../src/connect/Connect_init.h"
 
 #endif
